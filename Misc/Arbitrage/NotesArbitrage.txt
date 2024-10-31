@@ -1,0 +1,6 @@
+https://ethereum.stackexchange.com/questions/93572/uniswap-eth-to-tokens-to-eth-swap-function
+Uniswap examples: https://solidity-by-example.org/defi/uniswap-v2/
+
+Eample sarbitrage: https://github.com/Uniswap/v2-periphery/blob/master/contracts/examples/ExampleSwapToPrice.sol
+Flash loan:
+https://docs.balancer.fi/guides/arbitrageurs/flash-loans.html

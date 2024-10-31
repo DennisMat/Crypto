@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+<meta http-equiv="expires" content="0">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.5/web3.min.js"></script>
+
+    <script>
+        // Set up Web3 provider
+		/*
+     if (typeof window.ethereum !== 'undefined') {
+            window.web3 = new Web3(window.ethereum);
+            ethereum.enable();
+        } else {
+            //alert("Please install MetaMask to use this feature.");
+        }
+		*/
+
+		//const web3 = new Web3('https://eth.llamarpc.com');
+		const web3 = new Web3(new Web3.providers.HttpProvider('https://eth-sepolia.g.alchemy.com/v2/vn2dImpiYQtHbjj_Vd04-VYBYT9uqztN'));
+		web3.eth.getBlockNumber().then(console.log);
+		
+		web3.eth.getBalance('0x7d2774A3032423841eDAF701e343c051D4d0CA1F').then(console.log);
+
+
+        // Contract details
+
+		const contractAddress ="0xDA19EF3FD619cE14926d29d882e656c83d5F479b";//newer
+		//const contractAddress ="0xB3629974bF7B44c8e57F3929E4467A64B3A8c5e7";//older
+
+
+
+	   
+	
+
+// Function to call getMessage
+async function getSender() {
+		const abiString = [
+						{
+							"constant": true,
+							"inputs": [],
+							"name": "getSender",
+							"outputs": [
+								{
+									"name": "",
+									"type": "string"
+								}
+							],
+							"payable": false,
+							"stateMutability": "view",
+							"type": "function"
+						}
+					];
+
+		const abiInt = [
+					{
+						"constant": true,
+						"inputs": [],
+						"name": "getYY",
+						"outputs": [
+							{
+								"name": "",
+								"type": "uint256"
+							}
+						],
+						"payable": false,
+						"stateMutability": "view",
+						"type": "function"
+					}
+				];
+
+		// Set up the contract
+const contractString = new web3.eth.Contract(abiString, contractAddress);
+const contractInt = new web3.eth.Contract(abiInt, contractAddress);
+	try {
+		const messageString = await contractString.methods.getSender().call();
+		const messageInt = await contractInt.methods.getYY().call();
+		document.getElementById("output").innerHTML = "Message String : " + messageString + " Message int: " + messageInt;
+	} catch (error) {
+		console.error(error);
+		document.getElementById("output").innerHTML = "Error retrieving message.";
+	}
+}
+		
+async function increment() {
+
+const abi = [
+    // Example function signature (replace with your contract's function signature)
+    {
+        "constant": false,
+        "inputs": [],
+        "name": "inc",
+        "outputs": [],
+        "payable": true,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
+];
+
+	const privateKey = "ReplaceCorrectPrivatekeyHere";
+	const account = web3.eth.accounts.privateKeyToAccount(privateKey);
+	web3.eth.accounts.wallet.add(account);
+	web3.eth.defaultAccount = account.address;
+
+
+		// Create a contract instance
+		const contractInc = new web3.eth.Contract(abi, contractAddress);
+
+        const tx = {
+            from: account.address,
+            to: contractAddress,
+            gas: 500000, // specify gas limit
+            gasPrice: web3.utils.toWei('10', 'gwei'), // specify gas price
+            data: contractInc.methods.inc().encodeABI()
+        };
+		
+
+		const signedTx = await web3.eth.accounts.signTransaction(tx, privateKey);
+        const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+
+	try {
+		console.log("Transaction hash:", receipt.transactionHash);
+        console.log("Transaction confirmed in block:", receipt.blockNumber);
+		
+		document.getElementById("outputInc").innerText = 'Incremented succesfully: <a href="https://sepolia.etherscan.io/tx/' +receipt.transactionHash + '">' +receipt.transactionHash +'</a>' +
+		'  <a href="https://sepolia.etherscan.io/tx/' + receipt.blockNumber + '">Block</a>'
+	} catch (error) {
+		console.error(error);
+		document.getElementById("outputInc").innerText = "Error incrementing";
+	}
+	
+	
+
+	
+	
+}
+	
+    </script>
+</head>
+<body>
+    <h2>Get Message from Smart Contract on Sepolia</h2>
+    <button onclick="getSender()">Get Sender</button>
+    <p id="output"></p>
+	
+	<button onclick="increment()">Increment</button>
+    <p id="outputInc"></p>
+
+
+</body>
+</html>
