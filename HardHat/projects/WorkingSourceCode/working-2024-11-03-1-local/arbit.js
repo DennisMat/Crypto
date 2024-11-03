@@ -1,11 +1,10 @@
 async function main() {
-
     require('dotenv').config();
-    const util = require("./util.js");
-    const config = require("./config.local.json");
+    const util = require("../../prj1/scripts/util.js");
+    const config = require("../../prj1/scripts/config.local.json");
     console.log("Loaded config... env = " + config.env);
 
-    const priKeyPayer = process.env.priKeyPayer;
+    const priKeyPayer = process.env.priKeyPayerTest;
 
 
 
@@ -28,8 +27,8 @@ async function executeArbit(config, provider, util, priKeyPayer, deployedContrac
     const tokenToBeReceived = config.WETH; 
     
 
-    const ERC20ABI = require('./ERC20.json');
-    const { abi, bytecode } = require("../artifacts/contracts/Arbit.sol/Arbit.json");
+    const ERC20ABI = require('../../prj1/scripts/ERC20.json');
+    const { abi, bytecode } = require("../../prj1/artifacts/contracts/Arbit.sol/Arbit.json");
 
     const tokens = [tokenToBeReceived]; // Array of token addresses to borrow
     const amounts = [loanAmount];  // Corresponding loan amounts

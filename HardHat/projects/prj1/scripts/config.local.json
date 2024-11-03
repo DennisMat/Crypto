@@ -1,7 +1,7 @@
 {
     "env": "local",
     "providerUrl": "http://127.0.0.1:8545",
-    "payerAccount": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+    "payerAccountTest": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
     "UNISWAP_V2_ROUTER": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
     "UNISWAP_V2_FACTORY_ADDRESS": "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
     "BALANCER_VAULT":"0xBA12222222228d8Ba445958a75a0704d566BF2C8",
@@ -16,7 +16,7 @@
         "Ethereum": {
           "Uniswap_V2_Router": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
           "Uniswap_V3_Router": "0xE592427A0AEce92De3Edee1F18E0157C05861564",
-          "SushiSwap": "0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F",
+          "SushiSwap_Router": "0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F",
           "Balancer_V2_Vault": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
           "Curve_Finance_3Pool": "0xbEbc44782C7dB0a1A60Cb6Fe97d0b483032FF1C7",
           "KyberSwap": "0x818E6FECD516Ecc3849DAf6845e3EC868087B755"

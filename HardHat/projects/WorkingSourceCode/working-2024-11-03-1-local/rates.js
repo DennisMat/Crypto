@@ -1,46 +1,56 @@
 async function main() {
 
-
-    const util = require("./util.js");
-    const config = require("./config.prod.json");
+    const util = require("../../prj1/scripts/util.js");
+    const config = require("../../prj1/scripts/config.local.json");
     console.log("Loaded config... env = " + config.env);
+    const fs = require('fs').promises;
 
-
+     console.log("the block number has to be blockNumber: 21013574 in hardhat.config.js while forking else this scrip will not work");
 
     const provider = new ethers.JsonRpcProvider(config.providerUrl);
     const loanAmount = ethers.parseUnits("10", "ether");
 
-    // Router addresses
-    const UNISWAP_ROUTER_ADDRESS = "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D";
-    const SUSHISWAP_ROUTER_ADDRESS = "0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F";
+  
 
-    // let path = [config.WETH, config.USDT];
-    // await getConversionRate(config, provider, util, UNISWAP_ROUTER_ADDRESS,path);
-    // await getConversionRate(config, provider, util, SUSHISWAP_ROUTER_ADDRESS,path);
+   
 
-    // path = [config.USDT, config.WETH];
-    // await getConversionRate(config, provider, util, UNISWAP_ROUTER_ADDRESS,path);
-    // await getConversionRate(config, provider, util, SUSHISWAP_ROUTER_ADDRESS,path);
-
-
-    async function doStuff() {
+    async function doStuff1() {
         let amountIn = ethers.parseUnits("1", "ether");
 
-        let amountOut1 = await getConversionRateGeneric(config, provider, util, UNISWAP_ROUTER_ADDRESS, [config.WETH, config.USDT], amountIn);
-        let amountOut2 = await getConversionRateGeneric(config, provider, util, SUSHISWAP_ROUTER_ADDRESS, [config.USDT, config.WETH], amountOut1);
+        let amountOut1 = await getConversionRateGeneric(config, provider, util, config.SWAP_PLATFORMS.Ethereum.Uniswap_V2_Router, [config.WETH, config.USDT], amountIn);
+        let amountOut2 = await getConversionRateGeneric(config, provider, util, config.SWAP_PLATFORMS.Ethereum.Uniswap_V2_Router, [config.USDT, config.WETH], amountOut1);
 
+        let logText="loss";
         if (amountIn < amountOut2) {
-            console.log("Profit...");
+            logText="Profit Uniswap=" + ethers.formatUnits((amountOut2 - amountIn), "ether") + " ether";
         } else {
-            console.log("loss...=" + ethers.formatUnits((amountIn - amountOut2), "ether") + " ether");
+            logText="Loss Uniswap=" + ethers.formatUnits((amountIn - amountOut2), "ether") + " ether";
         }
+        fs.appendFile('log.txt', logText +"\n", 'utf8');
 
     }
 
-    for (let i = 0; i < 10; i++) {
+    async function doStuff2() {
+        let amountIn = ethers.parseUnits("1", "ether");
+
+        let amountOut1 = await getConversionRateGeneric(config, provider, util, config.SWAP_PLATFORMS.Ethereum.SushiSwap_Router, [config.WETH, config.USDT], amountIn);
+        let amountOut2 = await getConversionRateGeneric(config, provider, util, config.SWAP_PLATFORMS.Ethereum.SushiSwap_Router, [config.USDT, config.WETH], amountOut1);
+
+        let logText="loss";
+        if (amountIn < amountOut2) {
+            logText="Profit Sushiswap=" + ethers.formatUnits((amountOut2-amountIn), "ether") + " ether";
+        } else {
+            //logText="Loss Sushiswap=" + ethers.formatUnits((amountIn - amountOut2), "ether") + " ether";
+        }
+        //fs.appendFile('log.txt', logText +"\n", 'utf8');
+
+    }
+
+    for (let i = 0; i < 1; i++) {
         console.log(`Iteration: ${i}`);
-        doStuff();
-        await new Promise(resolve => setTimeout(resolve, 15000));;
+        doStuff1();
+        doStuff2();
+        await new Promise(resolve => setTimeout(resolve, 10000));;
     }
 
 
@@ -50,7 +60,7 @@ async function main() {
 
 
 async function getConversionRateGeneric(config, provider, util, routerAddress, path, amountIn) {
-    console.log("amountIn = " + amountIn);
+
     const routerAbi = [
         "function getAmountsOut(uint amountIn, address[] calldata path) external view returns (uint[] memory amounts)"
     ];
@@ -59,19 +69,20 @@ async function getConversionRateGeneric(config, provider, util, routerAddress, p
     try {
         const amounts = await router.getAmountsOut(amountIn, path);
         amountOut = amounts[1];
-        //console.log(`Conversion rate on ${routerAddress === config.UNISWAP_V2_ROUTER ? "Uniswap" : "SushiSwap"}:`);
+        console.log(`Conversion rate on ${routerAddress === config.UNISWAP_V2_ROUTER ? "Uniswap" : "SushiSwap"}:`);
         if (path[0] == config.WETH) {
             console.log(ethers.formatUnits(amountIn, "ether") + `  ETH = ${ethers.formatUnits(amountOut, 6)} USDT`);
         } else {
             console.log(amountIn, `USDC = ${ethers.formatUnits(amountOut, 12)} ETH `);
         }
-        console.log("amountOut = " + amountOut);
+        console.log("amountIn = " + amountIn +" amountOut = " + amountOut);
 
     } catch (error) {
         console.error("Error getting conversion rate:", error);
     }
     return amountOut;
 }
+
 
 async function getConversionRate(config, provider, util, routerAddress, path) {
     // ABI for `getAmountsOut` function

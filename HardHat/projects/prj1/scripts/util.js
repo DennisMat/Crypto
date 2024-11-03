@@ -328,8 +328,10 @@ function getTokenType(config, address){
     }else if(config.USDT==address){
         tokenType="USDT";
     }
-
     return tokenType;
+}
+
+function getSwapper(config, address){
 }
 
 module.exports = {
