@@ -1,0 +1,2 @@
+read https://hackernoon.com/arbitrage-as-a-shortest-path-problem-u2l34ow
+https://github.com/mendesfabio/balancer-arbitrage-bot

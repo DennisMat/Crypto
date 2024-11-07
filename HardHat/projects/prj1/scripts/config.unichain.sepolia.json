@@ -1,0 +1,41 @@
+{
+    "env": "unichain-sepolia",
+    "xxxx":"&apikey=YourApiKeyToken",
+    "providerUrl": "https://unichain-sepolia.blockscout.com/api/v2/44c92500-db8f-4c2d-9894-c5253fd84db0",
+    "payerAccount": "0x7d2774A3032423841eDAF701e343c051D4d0CA1F",
+    "uniswapRouter": "0x53544492C78D478294B5b1Fb8059a5D6C9aBBC67",
+    "uniswapRouterDoc": "Not sure of the above address. check this address= 0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14",
+    "uniswapWETHTokenSourceAddress": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+    "DAI": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+    "USDC": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    "test_platforms": {
+        "UnichainSepolia": {
+            "PoolManager": "0xc81462fec8b23319f288047f8a03a57682a35c1a",
+            "UniversalRouter": "0x5418a6d871d327a1cefe6deb97153f07cbf6030e",
+            "PositionManager": "0xb433cb9bcdf4cfcc5cab7d34f90d1a7deefd27b9",
+            "StateView": "0xde04c804dc75e90d8a64e5589092a1d6692efa45",
+            "Quoter": "0xfe6cf50c4cfe801dd2aef9c1b3ce24f551944df8"
+        },
+        "OPSepolia": {
+            "PoolManager": "0xe5df461803a59292c6c03978c17857479c40bc46",
+            "UniversalRouter": "0x78e7F1502A9e4115dEbd6876E0AC4FaEBDB96880",
+            "PositionManager": "0xef3853450006ce9fb12b540486c920c9a705f502",
+            "StateView": "0x5c038ee8ab7bd7699037e277874f1c611ad0c28f",
+            "Quoter": "0x60abeb98b3b95a0c5786261c1ab830e3d2383f9e"
+        },
+        "Sepolia": {
+            "PoolManager": "0x8c4bcbe6b9ef47855f97e675296fa3f6fafa5f1a",
+            "UniversalRouter": "0x4d73a4411ca1c660035e4aecc8270e5dddec8c17",
+            "PositionManager": "0x1b1c77b606d13b09c84d1c7394b96b147bc03147",
+            "StateView": "0x823d45b1329bcf3b369f08f36ba2690ff8e058c3",
+            "Quoter": "0xcd8716395d55ad17496448a4b2c42557001e9743"
+        },
+        "BaseSepolia": {
+            "PoolManager": "0x7da1d65f8b249183667cde74c5cbd46dd38aa829",
+            "UniversalRouter": "0x95273d871c8156636e114b63797d78D7E1720d81",
+            "PositionManager": "0xcdbe7b1ed817ef0005ece6a3e576fbae2ea5eafe",
+            "StateView": "0xe521e3c12d2faaa931ae79602278480c91c50f92",
+            "Quoter": "0xeb1aadac0a10ac2edfcbe496c3bcbc1dea4f994b"
+        }
+    }
+}

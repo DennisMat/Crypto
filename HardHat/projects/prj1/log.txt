@@ -39,3 +39,7 @@ Loss Uniswap=0.083180937680395449 ether
 Loss Uniswap=0.083180937680395449 ether
 loss
 Loss Uniswap=0.006085864823114962 ether
+Loss Uniswap=0.006085864823114962 ether
+Loss Uniswap=0.006085864823114962 ether
+Loss Uniswap=0.006107428603926956 ether
+Loss Uniswap=0.006107428418760282 ether
