@@ -17,12 +17,12 @@ async function getTokenBalances(config, provider, addressToCheck) {
     ];
 
     // List of ERC-20 token addresses to check (add more if needed)
-    const tokenAddresses = [        config.DAI,        config.USDC,        config.USDT,        config.WETH
+    const tokenAddresses = [config.DAI, config.USDC, config.USDT, config.WETH
     ];
-    const tokens = [        "DAI",        "USDC",        "USDT",        "WETH"    ];
+    const tokens = ["DAI", "USDC", "USDT", "WETH"];
 
     let i = 0;
- console.log("Balances in the account " + addressToCheck +" follows:");
+    console.log("Balances in the account " + addressToCheck + " follows:");
     for (const tokenAddress of tokenAddresses) {
         // Create a new contract instance for each token
         const tokenContract = new ethers.Contract(tokenAddress, erc20Abi, provider);
@@ -62,14 +62,29 @@ async function getSpecificTokenBalance(config, provider, tokenAddress, addressTo
         // Format balance based on token decimals
         const formattedBalance = ethers.formatUnits(balance, decimals);
 
-        console.log(" Token Pool Address: " + tokenAddress + ". Address " + addressToCheck +" has Balance: " + formattedBalance);
+        console.log("Address " + addressToCheck + " has Balance: of ", getTokenName(config,tokenAddress) , " = ", formattedBalance);
     } catch (error) {
         //console.log(`Failed to fetch balance for token at ${tokenAddress}: ${error}`);
     }
 
 }
 
-async function getLiquidity(config, provider, tokenA, tokenB) {
+async function getTokensInPool(config, provider, util, factoryAddress, token0, token1) {
+    const factoryArtifact = require('@uniswap/v2-core/build/UniswapV2Factory.json');
+
+
+    const factory = new ethers.Contract(factoryAddress, factoryArtifact.abi, provider)
+  
+    const pair = await factory.getPair(token0, token1);
+    console.log('Pair pool address = ', pair, " in factory " + getRouterName(config,factoryAddress) , " has the following balances: ");
+  
+    util.getSpecificTokenBalance(config, provider, token0, pair);
+    util.getSpecificTokenBalance(config, provider, token1, pair);
+
+
+}
+
+async function getLiquidity(config, provider, factoryAddress, tokenA, tokenB) {
     const UNISWAP_V2_FACTORY_ABI = [
         "function getPair(address tokenA, address tokenB) external view returns (address pair)"
     ];
@@ -82,7 +97,7 @@ async function getLiquidity(config, provider, tokenA, tokenB) {
 
 
     // Instantiate the Uniswap factory contract
-    const factoryContract = new ethers.Contract(config.UNISWAP_V2_FACTORY_ADDRESS, UNISWAP_V2_FACTORY_ABI, provider);
+    const factoryContract = new ethers.Contract(factoryAddress, UNISWAP_V2_FACTORY_ABI, provider);
 
     // Get the pair address for the two tokens
     const pairPoolAddress = await factoryContract.getPair(tokenA, tokenB);
@@ -314,29 +329,40 @@ async function deploy(SolidityContract) {
 
     await contractFactory.waitForDeployment();
     const deployedAddress = await contractFactory.getAddress();
-    console.log(SolidityContract +' deployed to:', deployedAddress);
+    console.log(SolidityContract + ' deployed to:', deployedAddress);
     return deployedAddress;
 }
 
-function getTokenType(config, address){
-    let tokenType="WETH";
+function getTokenName(config, tokenaddress) {
+    return findKeyByValue(config, tokenaddress);
+}
 
-    if(config.DAI==address){
-        tokenType="DAI";
-    }else if(config.USDC==address){
-        tokenType="USDT";
-    }else if(config.USDT==address){
-        tokenType="USDT";
+function getRouterName(config, routerAddress) {
+    return findKeyByValue(config, routerAddress);
+
+}
+
+function findKeyByValue(config, address) {
+    for (let key in config) {
+        if (config[key] === address) {
+            return key;
+        } else if (typeof config[key] === 'object' && config[key] !== null) {
+            let nestedKey = findKeyByValue(config[key], address);
+            if (nestedKey) {
+                return key + '.' + nestedKey;
+            }
+        }
     }
-    return tokenType;
+    return null; // Return null if the value isn't found
 }
 
-function getSwapper(config, address){
-}
+
+
 
 module.exports = {
     checkAccountBalance, getLiquidity, sendEtherToGetTokenOnlyForDemo,
-    sendEtherToGetTokenLessGas,deploy,getTokenType,
-    recieveEtherUsingTokens, reciveEtherForTokensLessGas, getTokenBalances, getSpecificTokenBalance
+    sendEtherToGetTokenLessGas, deploy,
+    recieveEtherUsingTokens, reciveEtherForTokensLessGas, getTokenBalances,
+    getSpecificTokenBalance, getRouterName, getTokenName, getTokensInPool
 
 }; 

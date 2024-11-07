@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "hardhat.config.js",
   "scripts": {
-    "start:dev":"nodemon server.js",
+    "start:dev": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -16,15 +16,24 @@
     "hardhat": "^2.22.13"
   },
   "dependencies": {
+    "-": "^0.0.1",
     "@1inch/cross-chain-sdk": "^0.1.8",
+    "@balancer-labs/sdk": "^1.1.6",
     "@balancer-labs/v2-vault": "^3.0.1",
     "@kyberswap/aggregator-sdk": "^0.1.22",
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "@openzeppelin/contracts": "^5.1.0",
+    "@uniswap/sdk-core": "^5.9.0",
+    "@uniswap/v2-core": "^1.0.1",
     "@uniswap/v2-periphery": "^1.1.0-beta.0",
+    "@uniswap/v3-core": "^1.0.1",
+    "@uniswap/v3-periphery": "^1.4.4",
+    "@uniswap/v3-sdk": "^3.18.1",
     "alchemy-sdk": "^3.4.4",
     "dotenv": "^16.4.5",
     "hardhat-tracer": "^3.1.0",
+    "npm": "^10.9.0",
+    "typescript": "^5.6.3",
     "web3": "^4.14.0"
   }
 }
