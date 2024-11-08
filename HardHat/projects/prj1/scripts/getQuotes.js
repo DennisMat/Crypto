@@ -1,6 +1,6 @@
 async function main() {
     require('dotenv').config();
-    const util = require("../../prj1/scripts/util.js");
+    const util = require("../../prj1/scripts/utils/util.js");
     const config = require("../../prj1/scripts/config.local.json");
     console.log("Loaded config... env = " + config.env);
 
@@ -16,7 +16,8 @@ async function main() {
         console.log(`Iteration: ${i}`);
         doStuff3();
 
-        await new Promise(resolve => setTimeout(resolve, 1000));;
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
     }
 
 
@@ -24,7 +25,7 @@ async function main() {
 
         const routerList = config.SWAP_PLATFORMS.Ethereum;
 
-        // await getConversionRateGeneric(config, provider, util, priKeyPayer,routerList.Uniswap_V2_Router, [config.WETH, config.USDT], "1");
+         //await util.utilQuotes.getQuotes(config, provider, util, priKeyPayer,routerList.Uniswap_V2_Router, [config.WETH, config.USDT], "1");
         // await getConversionRateGeneric(config, provider, util, priKeyPayer,routerList.Uniswap_V2_Router, [config.USDT, config.WETH], "1000");
         // await getConversionRateGeneric(config, provider, util, priKeyPayer,routerList.Uniswap_V2_Router, [config.WETH, config.DAI], "1");
         // await getConversionRateGeneric(config, provider, util, priKeyPayer, routerList.Uniswap_V3_Quoter, [config.WETH, config.DAI], "1");
@@ -33,9 +34,9 @@ async function main() {
         //await getTokensInBalancerPool(config, provider, util, priKeyPayer, "0x0075C4264d6b34c513dd53D22dBE06A036a57D3E");
         //await util.getTokensInPool(config, provider, util,routerList.UNI_FACTORY,config.USDC, config.WETH);
 
-        const poolId= await getPoolId(config.USDC, config.WETH);
+        //const poolId= await getPoolId(config.USDC, config.WETH);
 
-        await getTokensInBalancerPool(config, provider, util, priKeyPayer, poolId);
+       // await getTokensInBalancerPool(config, provider, util, priKeyPayer, poolId);
 
 
     }
