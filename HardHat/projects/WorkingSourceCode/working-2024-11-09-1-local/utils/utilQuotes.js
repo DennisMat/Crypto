@@ -28,7 +28,7 @@ async function getQuotes(config, provider, util, priKeyPayer, routerAddress, tok
         //console.error( "Error getting conversion rate:", error);
     }
 
-    //console.log("Conversion rate on " + routerName);
+    console.log("Conversion rate on " + routerName);
 
     let amountOutFormatted = amountOut;
 
@@ -42,7 +42,7 @@ async function getQuotes(config, provider, util, priKeyPayer, routerAddress, tok
     } else {
         amountOutFormatted = ethers.formatUnits(amountOut, 18)
     }
-    //console.log(amountIn + " " + tokenInName + " = " + amountOutFormatted + " " + tokenOutName);
+    console.log(amountIn + " " + tokenInName + " = " + amountOutFormatted + " " + tokenOutName);
 
 
 

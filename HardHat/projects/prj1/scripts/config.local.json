@@ -1,62 +1,59 @@
 {
-    "env": "local",
-    "providerUrl": "http://127.0.0.1:8545",
-    "payerAccountTest": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-    "UNISWAP_V2_ROUTER": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
-    "UNISWAP_V2_FACTORY_ADDRESS": "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
-    "BALANCER_VAULT":"0xBA12222222228d8Ba445958a75a0704d566BF2C8",
-    "uniswapRouterDoc": "This address is the same as the main net",
-    "uniswapWETHTokenSourceAddress": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
-    "tokens":{
+  "env": "local",
+  "providerUrl": "http://127.0.0.1:8545",
+  "payerAccountTest": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "UNISWAP_V2_ROUTER": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
+  "UNISWAP_V2_FACTORY_ADDRESS": "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
+  "BALANCER_VAULT": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
+  "uniswapRouterDoc": "This address is the same as the main net",
+  "uniswapWETHTokenSourceAddress": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+  "tokens": {
     "DAI": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
     "USDC": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
     "USDT": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
     "WETH": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
     "BAL": "0xba100000625a3754423978a60c9317c58a424e3D"
+  },
+  "Curve_Finance_DAI": 0,
+  "Curve_Finance_USDC": 1,
+  "Curve_Finance_USDT": 2,
+  "SWAP_PLATFORMS": {
+    "Ethereum": {
+      "Uniswap_V2_Router": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
+      "Uniswap_V3_Router": "0xE592427A0AEce92De3Edee1F18E0157C05861564",
+      "Uniswap_V3_Quoter": "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
+      "SushiSwap_Router": "0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F",
+      "Balancer_V2_Vault": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
+      "Curve_Finance_3Pool": "0x16C6521Dff6baB339122a0FE25a9116693265353",
+      "KyberSwap": "0x818E6FECD516Ecc3849DAf6845e3EC868087B755",
+      "SUSHI_FACTORY": "0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac",
+      "UNI_FACTORY": "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f"
     },
-
-    "Curve_Finance_DAI": 0,
-    "Curve_Finance_USDC": 1,
-    "Curve_Finance_USDT": 2,
-
-    "SWAP_PLATFORMS":{
-        "Ethereum": {
-          "Uniswap_V2_Router": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
-          "Uniswap_V3_Router": "0xE592427A0AEce92De3Edee1F18E0157C05861564",
-          "Uniswap_V3_Quoter":"0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
-          "SushiSwap_Router": "0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F",
-          "Balancer_V2_Vault": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
-          "Curve_Finance_3Pool": "0x16C6521Dff6baB339122a0FE25a9116693265353",
-          "KyberSwap": "0x818E6FECD516Ecc3849DAf6845e3EC868087B755",
-          "SUSHI_FACTORY" :"0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac",
-          "UNI_FACTORY" : "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f"
-        },
-        "BSC": {
-          "PancakeSwap_V2_Router": "0x10ED43C718714eb63d5aA57B78B54704E256024E",
-          "ApeSwap": "0xC0788A3aD43d79aa53B09c2EaCc313A787d1d607",
-          "BakerySwap": "0xCDe540d7eAFE93aC5fE6233Bee57E1270D3E330F"
-        },
-        "Polygon": {
-          "QuickSwap": "0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff",
-          "SushiSwap_Polygon": "0x1b02da8cb0d097eb8d57a175b88c7d8b47997506",
-          "Dfyn_Exchange": "0xA102072A4C07F06EC3B4900FDC4C7B80b6c57429"
-        },
-        "Avalanche": {
-          "Trader_Joe": "0x60aE616a2155Ee3d9A68541Ba4544862310933d4",
-          "Pangolin": "0xE54Ca86531e17Ef3616d22Ca28b0D458b6C89106"
-        },
-        "Fantom": {
-          "SpookySwap": "0xF491e7B69E4244ad4002BC14e878a34207E38c29",
-          "SpiritSwap": "0x16327Ee9aC61b8A3664D8f3bD8a8c6bCe8b390b9"
-        },
-        "Arbitrum": {
-          "Uniswap_V3_Arbitrum": "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45",
-          "SushiSwap_Arbitrum": "0x1b02da8cb0d097eb8d57a175b88c7d8b47997506"
-        },
-        "Optimism": {
-          "Uniswap_V3_Optimism": "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45",
-          "Velodrome": "0xa132DAB612dB5cB9fC9Ac426A0Cc215A3423F9c9"
-        }
-      }
-      
+    "BSC": {
+      "PancakeSwap_V2_Router": "0x10ED43C718714eb63d5aA57B78B54704E256024E",
+      "ApeSwap": "0xC0788A3aD43d79aa53B09c2EaCc313A787d1d607",
+      "BakerySwap": "0xCDe540d7eAFE93aC5fE6233Bee57E1270D3E330F"
+    },
+    "Polygon": {
+      "QuickSwap": "0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff",
+      "SushiSwap_Polygon": "0x1b02da8cb0d097eb8d57a175b88c7d8b47997506",
+      "Dfyn_Exchange": "0xA102072A4C07F06EC3B4900FDC4C7B80b6c57429"
+    },
+    "Avalanche": {
+      "Trader_Joe": "0x60aE616a2155Ee3d9A68541Ba4544862310933d4",
+      "Pangolin": "0xE54Ca86531e17Ef3616d22Ca28b0D458b6C89106"
+    },
+    "Fantom": {
+      "SpookySwap": "0xF491e7B69E4244ad4002BC14e878a34207E38c29",
+      "SpiritSwap": "0x16327Ee9aC61b8A3664D8f3bD8a8c6bCe8b390b9"
+    },
+    "Arbitrum": {
+      "Uniswap_V3_Arbitrum": "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45",
+      "SushiSwap_Arbitrum": "0x1b02da8cb0d097eb8d57a175b88c7d8b47997506"
+    },
+    "Optimism": {
+      "Uniswap_V3_Optimism": "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45",
+      "Velodrome": "0xa132DAB612dB5cB9fC9Ac426A0Cc215A3423F9c9"
+    }
+  }
 }

@@ -24,10 +24,10 @@ async function main() {
 
         const routerList = config.SWAP_PLATFORMS.Ethereum;
 
-        let amountOut1 = await getConversionRateGeneric(config, provider, util, priKeyPayer,routerList.Uniswap_V2_Router, [config.WETH, config.USDT], "1");
-        let amountOut2 = await getConversionRateGeneric(config, provider, util, priKeyPayer,routerList.Uniswap_V2_Router, [config.USDT, config.WETH], "1000");
-        let amountOut3 = await getConversionRateGeneric(config, provider, util, priKeyPayer,routerList.Uniswap_V2_Router, [config.WETH, config.DAI], "1");
-        let amountOut4 = await getConversionRateGeneric(config, provider, util, priKeyPayer, routerList.Uniswap_V3_Quoter, [config.WETH, config.DAI], "1");
+        // let amountOut1 = await getConversionRateGeneric(config, provider, util, priKeyPayer,routerList.Uniswap_V2_Router, [config.WETH, config.USDT], "1");
+        // let amountOut2 = await getConversionRateGeneric(config, provider, util, priKeyPayer,routerList.Uniswap_V2_Router, [config.USDT, config.WETH], "1000");
+        // let amountOut3 = await getConversionRateGeneric(config, provider, util, priKeyPayer,routerList.Uniswap_V2_Router, [config.WETH, config.DAI], "1");
+         let amountOut4 = await getConversionRateGeneric(config, provider, util, priKeyPayer, routerList.Uniswap_V3_Quoter, [config.WETH, config.DAI], "1");
 
         // let logText="loss";
         // if (amountIn < amountOut2) {
