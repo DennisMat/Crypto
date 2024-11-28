@@ -16,7 +16,7 @@ async function main() {
         console.log(`Iteration: ${i}`);
         doStuff3();
 
-        await new Promise(resolve => setTimeout(resolve, 10000));;
+        await new Promise(resolve => setTimeout(resolve, 10000));
     }
 
 

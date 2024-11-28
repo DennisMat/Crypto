@@ -1,3 +1,5 @@
 read https://hackernoon.com/arbitrage-as-a-shortest-path-problem-u2l34ow
 https://github.com/mendesfabio/balancer-arbitrage-bot
 https://hex.com/links
+Make sure ther is a way to get out money from the address of the deployed contract.
+https://www.youtube.com/watch?v=T0Zrttvhxx8

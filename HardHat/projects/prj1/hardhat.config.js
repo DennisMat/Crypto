@@ -33,17 +33,26 @@ module.exports = {
     localhost: {
       url: "http://127.0.0.1:8545", // Default Hardhat network URL
       chainId: 31337
+    },
+    arbitrumSepolia: {
+      url: 'https://sepolia-rollup.arbitrum.io/rpc',
+      chainId: 421614,
+      //accounts: ["vn2dImpiYQtHbjj_Vd04-VYBYT9uqztN"]
+    },
+    arbitrumOne: {
+      url: 'https://arb1.arbitrum.io/rpc',
+      //accounts: ["535fece3fe113d3ff0e5490aab2b2fb7"]
     }
     /*
     ,
 
 	   sepolia: {
-      url: 'https://eth-sepolia.g.alchemy.com/v2/vn2dImpiYQtHbjj_Vd04-VYBYT9uqztN',
-      accounts: [SEPOLIA_PRIVATE_KEY],
+      url: 'https://eth-sepolia.g.alchemy.com/v2',
+      accounts: ["vn2dImpiYQtHbjj_Vd04-VYBYT9uqztN"],
     },
 	   mainnet: {
-      url: 'https://eth-mainnet.g.alchemy.com/v2/vn2dImpiYQtHbjj_Vd04-VYBYT9uqztN',
-      accounts: [SEPOLIA_PRIVATE_KEY],
+      url: 'https://eth-mainnet.g.alchemy.com/v2',
+      accounts: ["vn2dImpiYQtHbjj_Vd04-VYBYT9uqztN"],
     }
     */
     

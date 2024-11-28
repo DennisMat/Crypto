@@ -16,7 +16,7 @@ function findKeyByValue(config, address) {
             let nestedKey = findKeyByValue(config[key], address);
             if (nestedKey) {
                 //return key + '.' + nestedKey;
-                return key;
+                return nestedKey;
             }
         }
     }
