@@ -73,9 +73,32 @@ contract TransactV01 is IFlashLoanRecipient {
     IUniswapV2Router02 private uniswap = IUniswapV2Router02(UNISWAP_V2_ROUTER);
 
 
+
+
     constructor() {
             owner = msg.sender;
         }
+
+  
+
+      function convertAndSendWETH(address recipient) public payable {
+        require(msg.value > 0, "No ETH sent");
+
+        IWETH weth = IWETH(WETH);
+
+        // Convert ETH to WETH
+        weth.deposit{value: msg.value}();
+
+        // Transfer WETH to recipient
+        bool success = weth.transfer(recipient, msg.value);
+        require(success, "WETH transfer failed");
+    }      
+
+    function doTrans(address[] memory routers, IERC20[] memory tokens, address recepient, uint256 flashAmount) external  payable   {
+        console.log("in doTrans ooooooooooooooooooooooooooooooooo");
+         require(owner ==msg.sender, "only sender can send");
+
+    }     
 
     function makeFlashLoan(
         IERC20[] memory tokens,
@@ -95,7 +118,7 @@ contract TransactV01 is IFlashLoanRecipient {
         require(msg.value > 0, "Send some ether");
 
         console.log( "Before flask loan ETH balance of this contract =",  address(this).balance,  " WETH token balance ( expected 0 ) ",  tokens[0].balanceOf(address(this))   );
-        IWETH(uniswap.WETH()).deposit{value: msg.value}(); //This contact now has tokens.
+        IWETH(uniswap.WETH()).deposit{value: msg.value}(); //This contact now has tokens. The ETH is swapped with WETH
         console.log("msg.value = ", msg.value, " ETH exchanged for tokens");
 
         console.log( "Before flask loan ETH balance of this contract =",  address(this).balance,  " WETH token balance ( expected 1 ) ",  tokens[0].balanceOf(address(this))   );

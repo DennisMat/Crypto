@@ -74,13 +74,14 @@ async function threadedTaskRouter(config, provider, util, fs, logFileName, priKe
     let textProfitLoss = "";
 
     if (amountIn < amountOut2) {
+
         textProfitLoss = " Profit = " + (amountOut2 - amountIn);
     } else {
         textProfitLoss = " Loss = " + (amountIn - amountOut2);
     }
 
     try {
-        const logText = textFigures + textProfitLoss
+        const logText = textFigures + textProfitLoss + "token combination = " + util.utilSearch.getTokenName(config, tokens[0])  +" "+ util.utilSearch.getTokenName(config, tokens[1]);
         console.log(logText);
         //fs.appendFile(logFileName, logText + "\n", 'utf8');
     } catch (error) {

@@ -46,23 +46,22 @@ async function getTokenBalances(config, provider, addressToCheck) {
 
 }
 
-async function getSpecificTokenBalance(config, provider, tokenAddress, addressToCheck) {
-
+async function getSpecificTokenBalance(config, utils, provider, tokenAddress, addressToCheck) {
     // ERC-20 ABI for the balanceOf function
     const erc20Abi = [
         'function balanceOf(address account) external view returns (uint256)',
         'function decimals() external view returns (uint8)'
     ];
-    const tokenContract = new ethers.Contract(tokenAddress, erc20Abi, provider);
+    const tokenContract = new ethers.Contract(tokenAddress, erc20Abi, provider);  
     try {
         // Get token balance and decimals
-        const balance = await tokenContract.balanceOf(addressToCheck);
+        const balance = await tokenContract.balanceOf(addressToCheck); 
         const decimals = await tokenContract.decimals();
 
         // Format balance based on token decimals
         const formattedBalance = ethers.formatUnits(balance, decimals);
 
-        console.log("Address " + addressToCheck + " has Balance: of ", getTokenName(config,tokenAddress) , " = ", formattedBalance);
+        console.log("Address " + addressToCheck + " has balance: of ", utils.utilSearch.getTokenName(config,tokenAddress) , " = ", formattedBalance);
     } catch (error) {
         //console.log(`Failed to fetch balance for token at ${tokenAddress}: ${error}`);
     }
