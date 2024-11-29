@@ -1,11 +1,4 @@
 async function main() {
-
-    // require('dotenv').config();
-    // const util = require("./utils/util.js");
-    // const config = require("./config.local.json");
-    // console.log("Loaded config... env = " + config.env);
-    // const fs = require('fs').promises;
-
     const util = require("./utils/util.js");
     const config = require("./config.local.json");
     const apikeyFile="C:/work/misc/keys.local.json";
