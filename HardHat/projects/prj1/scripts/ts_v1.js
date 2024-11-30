@@ -8,29 +8,30 @@ async function main() {
     const provider = new ethers.JsonRpcProvider(config.providerUrl);
     const priKeyPayer = configKey.privateKeyPayerTest;
 
-    //const deployedContractAddress = await utils.utilDeploy.deploy("TransactV01");
-    const deployedContractAddress = "0xd544d7A5EF50c510f3E90863828EAba7E392907A";
+    const deployedContractAddress = await utils.utilDeploy.deploy("TransactV01");
+    //const deployedContractAddress = "0xd544d7A5EF50c510f3E90863828EAba7E392907A";
 
     const loanAmount = ethers.parseUnits("1", "ether");
     const myBank = "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC";
     //await executeArbit(config, provider, utils, priKeyPayer, deployedContractAddress,loanAmount);
     //await sendWETH(config, provider, utils, priKeyPayer, deployedContractAddress,ethers.parseUnits("1", "ether"), myBank);
-   // await sendWETH(config, provider, utils, priKeyPayer, deployedContractAddress, 5789n, myBank);
+    // await sendWETH(config, provider, utils, priKeyPayer, deployedContractAddress, 5789n, myBank);
     //(UNISWAP_V2_ROUTER)10000====>(SushiSwap_Router)9955====>(UNISWAP_V2_ROUTER)10039 Profit = 39token combination = USDT USDC
 
 
     const routerList = config.SWAP_PLATFORMS.Ethereum;
 
-    const routers=[routerList.Uniswap_V2_Router, routerList.SushiSwap_Router];
-    const tokens=[config.tokens.USDT, config.tokens.USDC];
+    const routers = [routerList.Uniswap_V2_Router, routerList.SushiSwap_Router];
+    const tokens = [config.tokens.USDT, config.tokens.USDC];
+   // const tokens = [config.tokens.WETH,config.tokens.WETH];
 
-    flashAmount=34560000000n;
+    const flashLoanAmount = 34560000000n;
 
-   await doTrans(config, provider, utils, priKeyPayer, deployedContractAddress, flashAmount, routers, tokens,myBank);
+    await doTrans(config, provider, utils, priKeyPayer, deployedContractAddress, flashLoanAmount, routers, tokens, myBank);
 
 }
 
-async function doTrans(config, provider, utils, priKeyPayer, deployedContractAddress, flashAmount, routers, tokens, myBank) {
+async function doTrans(config, provider, utils, priKeyPayer, deployedContractAddress, flashLoanAmount, routers, tokens, myBank) {
     await utils.utilBalances.getSpecificTokenBalance(config, utils, provider, config.tokens.WETH, myBank);
 
     const ERC20ABI = require('./utils/ERC20.json');
@@ -45,10 +46,12 @@ async function doTrans(config, provider, utils, priKeyPayer, deployedContractAdd
     const payerAddress = await wallet.getAddress();
     //console.log("Payer : " + payerAddress);
 
+
+
     try {
         const tx = await contract.doTrans(
             routers, tokens,
-            myBank, flashAmount,
+            myBank, [flashLoanAmount], userData,
             {
                 maxFeePerGas: ethers.parseUnits("50", "gwei"),        // Maximum total gas fee per unit of gas
                 maxPriorityFeePerGas: ethers.parseUnits("1", "gwei"), // Tip for miners
@@ -66,7 +69,7 @@ async function doTrans(config, provider, utils, priKeyPayer, deployedContractAdd
 }
 
 
-async function executeArbit(config, provider, utils, priKeyPayer, deployedContractAddress, loanAmount) {
+async function executeArbit(config, provider, utils, priKeyPayer, deployedContractAddress, loanAmount, myBank) {
 
     const tokenToBeReceived = config.tokens.WETH;
 
