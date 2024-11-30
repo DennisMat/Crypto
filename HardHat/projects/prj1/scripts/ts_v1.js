@@ -22,8 +22,9 @@ async function main() {
     const routerList = config.SWAP_PLATFORMS.Ethereum;
 
     const routers = [routerList.Uniswap_V2_Router, routerList.SushiSwap_Router];
-    const tokens = [config.tokens.USDT, config.tokens.USDC];
-   // const tokens = [config.tokens.WETH,config.tokens.WETH];
+    //const routers = [routerList.Uniswap_V2_Router];
+    //const tokens = [config.tokens.WETH,config.tokens.USDT, config.tokens.USDC,config.tokens.WETH];
+    const tokens = [config.tokens.WETH,config.tokens.USDC,config.tokens.WETH];
 
     const flashLoanAmount = 34560000000n;
 

@@ -108,6 +108,7 @@ contract TransactV01 is IFlashLoanRecipient {
         tokens = tokensIncoming;
         recepient = recepientIncoming;
 
+        // done for testing only, remove in prod.
         IWETH(WETH).deposit{value: msg.value}();
 
         IERC20[] memory t1 = new IERC20[](1);
@@ -132,6 +133,43 @@ contract TransactV01 is IFlashLoanRecipient {
             " WETH token balance ",
             IERC20(uniswap.WETH()).balanceOf(address(this))
         );
+        console.log("routers.length=", routers.length);
+        uint256 amountIn = flashLoanAmounts[0];
+
+        for (uint256 i = 0; i < routers.length - 1; i++) {
+            uint256 amountOut = swap( //new amount in
+                amountIn,
+                routers[i],
+                address(tokens[i]),
+                address(tokens[i + 1])
+            );
+            console.log("============", i, "============");
+            console.log("amountIn=", amountIn, "Token From=", address(tokens[i]));
+            console.log("router", routers[i]);
+            console.log("amountOut=",amountOut,"Token To=",address(tokens[i + 1]));
+
+             amountIn = amountOut;
+        }
+
+        // console.log("============in final step============");
+        // console.log("amountIn=", amountIn, "tokenA=",address(tokens[routers.length-1]));
+        // console.log("router", routers[routers.length - 1]);
+        // console.log( "tokenB=", address(tokens[0]));
+
+        uint256 finalAmountOut = swap(
+            amountIn,
+            routers[routers.length - 1],
+            address(tokens[routers.length-1]),
+            address(tokens[routers.length]) 
+        );
+
+
+    console.log("============in final step============");
+        console.log("amountIn=", amountIn, "tokenA=", address(tokens[routers.length-1]));
+        console.log("router", routers[routers.length - 1]);
+        console.log("amountOut=", finalAmountOut,  "tokenB=", address(tokens[0]));
+
+        /*
         //This contract now has WETH eqivalent to flashLoanAmounts[0]
 
         // console.log(
@@ -140,8 +178,8 @@ contract TransactV01 is IFlashLoanRecipient {
         //     "myBank balance (expected 0 ETH)= ",
         //     IERC20(uniswap.WETH()).balanceOf(myBank)
         // );
-
-        address tokenB=address(tokens[1]);
+        address tokenA = WETH;
+        address tokenB = address(tokens[1]);
         if (tokens[0] != IERC20(uniswap.WETH())) {
             tokenB = address(tokens[0]);
         }
@@ -150,12 +188,20 @@ contract TransactV01 is IFlashLoanRecipient {
         uint256 amountout1 = swap(
             flashLoanAmounts[0],
             routers[0],
-            WETH,
+            tokenA,
             tokenB
         );
-
         console.log("amountout1=", amountout1);
 
+        if (tokens[0] != IERC20(uniswap.WETH())) {
+            tokenA = address(tokens[0]);
+            tokenB = address(tokens[1]);
+        } else {}
+
+        uint256 amountout2 = swap(amountout1, routers[1], tokenA, tokenB);
+        console.log("amountout2=", amountout2);
+
+*/
         //uint256[] memory  amountsU =swap(amountsS[1], uniswap, USDC,  uniswap.WETH(), "USDC", "WETH" );
 
         /*
@@ -243,14 +289,14 @@ contract TransactV01 is IFlashLoanRecipient {
             amountOut = amounts[1];
         } //else if (router == SUSHISWAP_ROUTER) {}
 
-        console.log("amount put in ", tokenA, ") =", amountForSwapping);
-        console.log("amount received", tokenB, ")=", amountOut);
-        console.log(tokenA, " token balance=", ta.balanceOf(address(this)));
-        console.log(
-            tokenB,
-            ", token balance ",
-            IERC20(tokenB).balanceOf(address(this))
-        );
+        // console.log("amount put in ", tokenA, ") =", amountForSwapping);
+        // console.log("amount received", tokenB, ")=", amountOut);
+        // console.log(tokenA, " token balance=", ta.balanceOf(address(this)));
+        // console.log(
+        //     tokenB,
+        //     ", token balance ",
+        //     IERC20(tokenB).balanceOf(address(this))
+        // );
 
         return amountOut;
     }
