@@ -3,42 +3,21 @@ pragma solidity ^0.8.0;
 
 // from https://www.reddit.com/r/ethdev/comments/1bvsqph/i_have_no_idea_how_to_troubleshoot_this_execution/
 
-   interface IAaveLendingPool {
-    function deposit(
-        address asset,
-        uint256 amount,
-        address onBehalfOf,
-        uint16 referralCode
-    ) external;
+interface IAaveLendingPool {
+    function deposit(address asset, uint256 amount, address onBehalfOf, uint16 referralCode) external;
 
-    function withdraw(
-        address asset,
-        uint256 amount,
-        address to
-    ) external;
+    function withdraw(address asset, uint256 amount, address to) external;
 
     function getReservesList() external view returns (address[] memory);
 }
 
 interface IUniswapV2Router02 {
-    function swapExactETHForTokens(
-        uint amountOutMin,
-        address[] calldata path,
-        address to,
-        uint deadline
-    ) external payable returns (uint[] memory amounts);
-    function swapExactTokensForTokens(
-  uint amountIn,
-  uint amountOutMin,
-  address[] calldata path,
-  address to,
-  uint deadline
-) external returns (uint[] memory amounts);
+    function swapExactETHForTokens(uint amountOutMin, address[] calldata path, address to, uint deadline) external payable returns (uint[] memory amounts);
+    function swapExactTokensForTokens(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline) external returns (uint[] memory amounts);
 }
 
 contract ArbitrageFlashLoan {
-
-    address public constant AAVE_LENDING_POOL_ADDRESS = 0x7d2768dE32b0b80b7a3454c06BdAc94A69DDc7A9; 
+    address public constant AAVE_LENDING_POOL_ADDRESS = 0x7d2768dE32b0b80b7a3454c06BdAc94A69DDc7A9;
     address public uniswapV2Router;
     address public token0;
     address public token1;
@@ -58,16 +37,13 @@ contract ArbitrageFlashLoan {
     IAaveLendingPool public lendingPool;
 
     constructor() {
-
-        fee = 90; 
+        fee = 90;
         lendingPool = IAaveLendingPool(AAVE_LENDING_POOL_ADDRESS);
-    
     }
 
     event Test(uint256[] amount);
 
     function executeSwaps(TradeInstruction[] calldata tradeInstructions) external {
-
         // Initialize dynamic array in storage
         TradeInstruction[] memory instructions = new TradeInstruction[](tradeInstructions.length);
 
@@ -78,8 +54,7 @@ contract ArbitrageFlashLoan {
 
         // Loop through each trade instruction
         for (uint256 i = 0; i < tradeInstructions.length; i++) {
-
-        // Select router based on trade instruction
+            // Select router based on trade instruction
             address routerAddress = tradeInstructions[i].startOnUniswap ? uniswapV2RouterAddress : sushiswapRouterAddress;
 
             IUniswapV2Router02 router = IUniswapV2Router02(routerAddress);
@@ -92,13 +67,7 @@ contract ArbitrageFlashLoan {
 
             //BREAKING HERE ---v
 
-            uint256[] memory amounts = router.swapExactTokensForTokens(
-                amountIn,
-                instructions[i].amountOut,
-                path,
-                address(this),
-                block.timestamp
-            );
+            uint256[] memory amounts = router.swapExactTokensForTokens(amountIn, instructions[i].amountOut, path, address(this), block.timestamp);
 
             instructions[i].amountOut = amounts[1];
 

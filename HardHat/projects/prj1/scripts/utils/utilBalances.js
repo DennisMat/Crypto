@@ -1,3 +1,21 @@
+async function getFeeData(priKeyPayer, provider) {
+    const ERC20ABI = require('./ERC20.json');
+    let wallet = new ethers.Wallet(priKeyPayer, provider);
+       //const erc20 = new ethers.Contract(deployedContractAddress, ERC20ABI, wallet);
+   
+       const feeData = await provider.getFeeData();
+   
+       //console.log("feeData=", feeData);
+       // doc: https://docs.ethers.org/v5/api/providers/provider/#Provider-getGasPrice
+       // {
+   //   gasPrice:1000000008n. The gasPrice to use for legacy transactions or networks which do not support EIP-1559.
+   //   maxFeePerGas: 1000000016n.  Price per unit of gas. This is based on the most recent block's baseFee.
+   //   maxPriorityFeePerGas:1000000000n. 
+   //Same as maxFeePerGas, but additionally this accounts for tips+  uncle risk etc.
+   // }
+
+   return feeData;
+}
 async function checkAccountBalance(address) {
     const accounts = (await ethers.getSigners()).map(signer => signer.address);
 
@@ -47,25 +65,26 @@ async function getTokenBalances(config, provider, addressToCheck) {
 }
 
 async function getSpecificTokenBalance(config, utils, provider, tokenAddress, addressToCheck) {
+    let formattedBalance;
     // ERC-20 ABI for the balanceOf function
     const erc20Abi = [
         'function balanceOf(address account) external view returns (uint256)',
         'function decimals() external view returns (uint8)'
     ];
-    const tokenContract = new ethers.Contract(tokenAddress, erc20Abi, provider);  
+    const tokenContract = new ethers.Contract(tokenAddress, erc20Abi, provider);
     try {
         // Get token balance and decimals
-        const balance = await tokenContract.balanceOf(addressToCheck); 
+        const balance = await tokenContract.balanceOf(addressToCheck);
         const decimals = await tokenContract.decimals();
 
         // Format balance based on token decimals
-        const formattedBalance = ethers.formatUnits(balance, decimals);
+        formattedBalance = ethers.formatUnits(balance, decimals);
 
-        console.log("Address " + addressToCheck + " has balance: of ", utils.utilSearch.getTokenName(config,tokenAddress) , " = ", formattedBalance);
+        //console.log("Address " + addressToCheck + " has balance: of ", utils.utilSearch.getTokenName(config,tokenAddress) , " = ", formattedBalance);
     } catch (error) {
         //console.log(`Failed to fetch balance for token at ${tokenAddress}: ${error}`);
     }
-
+    return formattedBalance;
 }
 
 async function getTokensInPool(config, provider, util, factoryAddress, token0, token1) {
@@ -73,10 +92,10 @@ async function getTokensInPool(config, provider, util, factoryAddress, token0, t
 
 
     const factory = new ethers.Contract(factoryAddress, factoryArtifact.abi, provider)
-  
+
     const pair = await factory.getPair(token0, token1);
-    console.log('Pair pool address = ', pair, " in factory " + getRouterName(config,factoryAddress) , " has the following balances: ");
-  
+    console.log('Pair pool address = ', pair, " in factory " + getRouterName(config, factoryAddress), " has the following balances: ");
+
     util.getSpecificTokenBalance(config, provider, token0, pair);
     util.getSpecificTokenBalance(config, provider, token1, pair);
 
@@ -138,7 +157,7 @@ async function getLiquidity(config, provider, factoryAddress, tokenA, tokenB) {
 
 
 module.exports = {
-    checkAccountBalance, getLiquidity,getTokenBalances,
-    getSpecificTokenBalance, getTokensInPool
+    checkAccountBalance, getLiquidity, getTokenBalances,
+    getSpecificTokenBalance, getTokensInPool,getFeeData
 
 }; 

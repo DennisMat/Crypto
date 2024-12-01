@@ -1,41 +1,49 @@
 async function main() {
+    const ERC20ABI = require('./utils/ERC20.json');
     const utils = require("./utils/util.js");
     const config = require("./config.local.json");
     const apikeyFile = "C:/work/misc/keys.local.json";
     const configKey = require(apikeyFile);
-    console.log("Loaded config... env = " + config.env);
+    console.log("Loaded config.env = " + config.env);
     const fs = require('fs').promises;
     const provider = new ethers.JsonRpcProvider(config.providerUrl);
+
+
+
+    //const priKeyPayer = configKey.localAddress1PrivateKey;
     const priKeyPayer = configKey.privateKeyPayerTest;
+    
+    const myBank = config.localAddress2;
 
     const deployedContractAddress = await utils.utilDeploy.deploy("TransactV01");
-    //const deployedContractAddress = "0xd544d7A5EF50c510f3E90863828EAba7E392907A";
+    //const deployedContractAddress = "0x366FDba679A8ece0567C1aFFC8C543f6FE9964d5";
 
-    const loanAmount = ethers.parseUnits("1", "ether");
-    const myBank = "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC";
+
+
+
     //await executeArbit(config, provider, utils, priKeyPayer, deployedContractAddress,loanAmount);
-    //await sendWETH(config, provider, utils, priKeyPayer, deployedContractAddress,ethers.parseUnits("1", "ether"), myBank);
-    // await sendWETH(config, provider, utils, priKeyPayer, deployedContractAddress, 5789n, myBank);
-    //(UNISWAP_V2_ROUTER)10000====>(SushiSwap_Router)9955====>(UNISWAP_V2_ROUTER)10039 Profit = 39token combination = USDT USDC
+    await sendWETH(config, provider, utils, priKeyPayer, deployedContractAddress,ethers.parseUnits("1", "ether"), myBank);
+    //await sendWETH(config, provider, utils, priKeyPayer, deployedContractAddress, 500n, myBank);
 
 
-    const routerList = config.SWAP_PLATFORMS.Ethereum;
+    // const loanAmount = ethers.parseUnits("1", "ether");
+    // const routerList = config.SWAP_PLATFORMS.Ethereum;
 
-    const routers = [routerList.Uniswap_V2_Router, routerList.SushiSwap_Router];
-    //const routers = [routerList.Uniswap_V2_Router];
-    //const tokens = [config.tokens.WETH,config.tokens.USDT, config.tokens.USDC,config.tokens.WETH];
-    const tokens = [config.tokens.WETH,config.tokens.USDC,config.tokens.WETH];
+    // const routers = [routerList.Uniswap_V2_Router, routerList.Uniswap_V3_Router];
+    // //const routers = [routerList.Uniswap_V2_Router];
+    // //const tokens = [config.tokens.WETH,config.tokens.USDT, config.tokens.USDC,config.tokens.WETH];
+    // const tokens = [config.tokens.WETH, config.tokens.USDC, config.tokens.WETH];
 
-    const flashLoanAmount = 34560000000n;
+    // const flashLoanAmount = 34560000000n;
+    // const maxPoolFee = 3000n;
 
-    await doTrans(config, provider, utils, priKeyPayer, deployedContractAddress, flashLoanAmount, routers, tokens, myBank);
+    //await doTrans(config, provider, utils, priKeyPayer, deployedContractAddress, flashLoanAmount, maxPoolFee, routers, tokens, myBank);
 
 }
 
-async function doTrans(config, provider, utils, priKeyPayer, deployedContractAddress, flashLoanAmount, routers, tokens, myBank) {
-    await utils.utilBalances.getSpecificTokenBalance(config, utils, provider, config.tokens.WETH, myBank);
-
-    const ERC20ABI = require('./utils/ERC20.json');
+async function doTrans(config, provider, utils, priKeyPayer, deployedContractAddress, flashLoanAmount, maxPoolFee, routers, tokens, myBank) {
+    console.log("before balance = " + await utils.utilBalances.getSpecificTokenBalance(config, utils, provider, config.tokens.WETH, myBank));
+    
     const { abi, bytecode } = require("../artifacts/contracts/TransactV01.sol/TransactV01.json");
 
     const abiCoder = new ethers.AbiCoder();
@@ -47,12 +55,10 @@ async function doTrans(config, provider, utils, priKeyPayer, deployedContractAdd
     const payerAddress = await wallet.getAddress();
     //console.log("Payer : " + payerAddress);
 
-
-
     try {
         const tx = await contract.doTrans(
             routers, tokens,
-            myBank, [flashLoanAmount], userData,
+            myBank, [flashLoanAmount], maxPoolFee, userData,
             {
                 maxFeePerGas: ethers.parseUnits("50", "gwei"),        // Maximum total gas fee per unit of gas
                 maxPriorityFeePerGas: ethers.parseUnits("1", "gwei"), // Tip for miners
@@ -65,7 +71,7 @@ async function doTrans(config, provider, utils, priKeyPayer, deployedContractAdd
     } catch (error) {
         console.error("Error sending Ether:", error);
     }
-    await utils.utilBalances.getSpecificTokenBalance(config, utils, provider, config.tokens.WETH, myBank);
+    console.log("after balance = " + await utils.utilBalances.getSpecificTokenBalance(config, utils, provider, config.tokens.WETH, myBank));
 
 }
 
@@ -116,24 +122,28 @@ async function executeArbit(config, provider, utils, priKeyPayer, deployedContra
 
 
 async function sendWETH(config, provider, utils, priKeyPayer, deployedContractAddress, amount, myBank) {
-    await utils.utilBalances.getSpecificTokenBalance(config, utils, provider, config.tokens.WETH, myBank);
+
+
+
+
+    console.log("WETH before balance in  " + myBank + " " + await utils.utilBalances.getSpecificTokenBalance(config, utils, provider, config.tokens.WETH, myBank));
     const ERC20ABI = require('./utils/ERC20.json');
     const { abi, bytecode } = require("../artifacts/contracts/TransactV01.sol/TransactV01.json");
-    // const abi = [
-    //     "function convertAndSendWETH(address recipient) public payable",
-    //   ];
 
     let wallet = new ethers.Wallet(priKeyPayer, provider);
     const contract = new ethers.Contract(deployedContractAddress, abi, wallet);
 
-    const payerAddress = await wallet.getAddress();
+    const feeData=await utils.utilBalances.getFeeData(priKeyPayer, provider);
+
+    const feeBuffer=100n;
+    const gasLimit=30000000n; //this appers to be a hard limit set by the networkInterfaces.
 
     try {
         const tx = await contract.convertAndSendWETH(myBank,
             {
-                maxFeePerGas: ethers.parseUnits("50", "gwei"),        // Maximum total gas fee per unit of gas
-                maxPriorityFeePerGas: ethers.parseUnits("1", "gwei"), // Tip for miners
-                gasLimit: ethers.parseUnits("2000000", "wei"),
+                maxFeePerGas: feeData.maxFeePerGas +feeBuffer,  // this the base fee which is typically 1000000000n
+                maxPriorityFeePerGas: feeData.maxPriorityFeePerGas +feeBuffer, // Tip for miners
+                gasLimit: gasLimit,// this is the upper limit
                 value: amount
             }
         );
@@ -143,7 +153,7 @@ async function sendWETH(config, provider, utils, priKeyPayer, deployedContractAd
         console.error("Error sending Ether:", error);
     }
 
-    await utils.utilBalances.getSpecificTokenBalance(config, utils, provider, config.tokens.WETH, myBank);
+    console.log("WETH after balance in  " + myBank + " " + await utils.utilBalances.getSpecificTokenBalance(config, utils, provider, config.tokens.WETH, myBank));
 
 
 }

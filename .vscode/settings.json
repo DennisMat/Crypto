@@ -1,4 +1,5 @@
 {
-    "editor.wordWrapColumn": 200,
-    "editor.rulers": [200]
+  "editor.wordWrapColumn": 400,
+  "editor.rulers": [400],
+  "prettier.printWidth": 400
 }
