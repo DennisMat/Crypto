@@ -1,8 +1,8 @@
 async function main() {
     const ERC20ABI = require('./utils/ERC20.json');
     const utils = require("./utils/util.js");
-    const config = require("./config.local.json");
-    const apikeyFile = "C:/work/misc/keys.local.json";
+    const config = require("./config.sepolia.json");
+    const apikeyFile = "C:/work/misc/keys.sepolia.json";
     const configKey = require(apikeyFile);
     console.log("Loaded config.env = " + config.env);
     const fs = require('fs').promises;
@@ -10,20 +10,20 @@ async function main() {
 
 
 
-    //const priKeyPayer = configKey.localAddress1PrivateKey;
-    const priKeyPayer = configKey.privateKeyPayerTest;
+    const priKeyPayer = configKey.address1PrivateKey;
+    //const priKeyPayer = configKey.privateKeyPayerTest;
     
-    const myBank = config.localAddress2;
+    const myBank = config.address2;
 
-    const deployedContractAddress = await utils.utilDeploy.deploy("TransactV01");
-    //const deployedContractAddress = "0x366FDba679A8ece0567C1aFFC8C543f6FE9964d5";
+    //const deployedContractAddress = await utils.utilDeploy.deploy("TransactV01");
+    const deployedContractAddress = "0xf165a31DcBB4d2F00CB31532D1D0a27Bb80aa49d";
 
 
 
 
     //await executeArbit(config, provider, utils, priKeyPayer, deployedContractAddress,loanAmount);
-    await sendWETH(config, provider, utils, priKeyPayer, deployedContractAddress,ethers.parseUnits("1", "ether"), myBank);
-    //await sendWETH(config, provider, utils, priKeyPayer, deployedContractAddress, 500n, myBank);
+    //await sendWETH(config, provider, utils, priKeyPayer, deployedContractAddress,ethers.parseUnits("1", "ether"), myBank);
+    await sendWETH(config, provider, utils, priKeyPayer, deployedContractAddress, 500n, myBank);
 
 
     // const loanAmount = ethers.parseUnits("1", "ether");
@@ -124,8 +124,6 @@ async function executeArbit(config, provider, utils, priKeyPayer, deployedContra
 async function sendWETH(config, provider, utils, priKeyPayer, deployedContractAddress, amount, myBank) {
 
 
-
-
     console.log("WETH before balance in  " + myBank + " " + await utils.utilBalances.getSpecificTokenBalance(config, utils, provider, config.tokens.WETH, myBank));
     const ERC20ABI = require('./utils/ERC20.json');
     const { abi, bytecode } = require("../artifacts/contracts/TransactV01.sol/TransactV01.json");
@@ -134,9 +132,13 @@ async function sendWETH(config, provider, utils, priKeyPayer, deployedContractAd
     const contract = new ethers.Contract(deployedContractAddress, abi, wallet);
 
     const feeData=await utils.utilBalances.getFeeData(priKeyPayer, provider);
+    console.log("feeData=",feeData);
 
-    const feeBuffer=100n;
-    const gasLimit=30000000n; //this appers to be a hard limit set by the networkInterfaces.
+    let feeBuffer=100n;
+    let gasLimit=3000000n; //300000000n appears to be a hard limit set by the network, 30 million gas
+
+    feeBuffer=5000n;
+    gasLimit=ethers.parseUnits("20", "gwei");
 
     try {
         const tx = await contract.convertAndSendWETH(myBank,
